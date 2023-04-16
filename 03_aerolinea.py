@@ -1,5 +1,5 @@
 from datetime import datetime
-
+'''actualizacion a ver si funciona'''
 #metodos de validacion para reutilizacion
 
 def validar_str(dato):
