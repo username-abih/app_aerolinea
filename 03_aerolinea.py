@@ -8,11 +8,11 @@ def validar_str(dato):
 
 def validar_int(dato):
     if not isinstance(dato, int) and dato is not None:
-        raise ValueError("el valor {} debe ser un nuemero entero".format(dato))
+        raise ValueError("el valor {} debe ser un numero entero".format(dato))
 
 
 def validar_float(dato):
-    if not isinstance(dato, float) and dato is not None:
+    if not isinstance(dato, float) and not isinstance(dato, int) and dato is not None :
         raise ValueError("el valor {} debe ser un numero flotante".format(dato))
 
 
@@ -44,8 +44,13 @@ def validar_hora_hh_mm(dato):
 
 # pasajeros y subsecuentes
 class Pasajero():
-    '''
+    '''Clase Pasajero con los atributos id, nombre y precio billete,
+    con el metodo mostrar puntos
 
+    ARGS
+    -Id: numero unico e irrepetible para identificar al pasajero
+    -Nombre: nombre del pasajero
+    -precio billete: precio total del billete
     '''
     def __init__(self, id=None, nombre= None, precio_billete= None):
         validar_int(id)
@@ -55,8 +60,9 @@ class Pasajero():
         validar_float(precio_billete)
         self.__precio_billete = precio_billete
 
+    #funcion mostrar puntos que muestra los puntos actuales del pasajero
     def mostrar_puntos(self):
-        pass
+        print("puntos actuales: {}".format(self.__cantidad_puntos))
 
     #setter y getters
     @property
@@ -84,19 +90,24 @@ class Pasajero():
         self.__precio_billete = nuevo_precio_billete
 
     def __str__(self):
-        return'''PASAJERO
+        return'''
         -ID:             {}
         -NOMBRE:         {}
-        -PRECIO BILLETE: {}
-        '''.format(self.__id, self.__nombre, self.__precio_billete)
+        -PRECIO BILLETE: {}'''.format(self.__id, self.__nombre, self.__precio_billete)
 
 
-class Pasajero_Frecuente(Pasajero):
-    '''
+class Pasajero_frecuente(Pasajero):
+    '''Clase Pasajero frecuente con los atributos id, nombre, precio billete,
+    y cantidad de puntos, con el metodo mostrar puntos heredado del padre
 
+    ARGS
+    -Id: numero unico e irrepetible para identificar al pasajero
+    -Nombre: nombre del pasajero
+    -precio billete: precio total del billete
+    -cantidad puntos: cantidad de puntos recolectados por los vuelos del cliente
     '''
     def __init__(self, id=None, nombre= None, precio_billete= None,
-                 cantidad_puntos=None):
+                 cantidad_puntos=0):
         super().__init__(id, nombre, precio_billete)
         validar_float(cantidad_puntos)
         self.__cantidad_puntos = cantidad_puntos
@@ -114,21 +125,25 @@ class Pasajero_Frecuente(Pasajero):
         self.__cantidad_puntos = nuevos_puntos
 
     def __str__(self):
-        return super().__str__() + '''
+        return "Pasajero Frecuente" + super().__str__() + '''
         -PUNTOS: {}'''.format(self.__cantidad_puntos)
 
 
 class Pasajero_no_frecuente(Pasajero):
-    '''
+    '''Clase Pasajero frecuente con los atributos id, nombre, precio billete,
+    y cantidad de puntos, con el metodo mostrar puntos heredado del padre
 
+    ARGS
+    -Id: numero unico e irrepetible para identificar al pasajero
+    -Nombre: nombre del pasajero
+    -precio billete: precio total del billete
+    -cantidad puntos: cantidad de puntos recolectados por los vuelos del cliente
     '''
     def __init__(self, id=None, nombre= None, precio_billete= None,
-                 cantidad_puntos=None):
+                 cantidad_puntos=0):
         super().__init__(id, nombre, precio_billete)
         validar_float(cantidad_puntos)
         self.__cantidad_puntos = cantidad_puntos
-    def mostrar_puntos(self):
-        super().mostrar_puntos()
 
     # getter y setter
     @property
@@ -140,13 +155,13 @@ class Pasajero_no_frecuente(Pasajero):
             self.__cantidad_puntos = nuevos_puntos
 
     def __str__(self):
-        return super().__str__() + '''
+        return "Pasajero no frecuente" + super().__str__() + '''
         -PUNTOS: {}'''.format(self.__cantidad_puntos)
 
 
 # bulto
 class Bulto():
-    '''clase Bulto que contiene los atributos ID y Peso.
+    '''Bulto que contiene los atributos ID y Peso.
 
     ARGS:
     -ID: numero unico e irrepetible para identificar al bulto
@@ -178,7 +193,7 @@ class Bulto():
     def __str__(self):
         return '''Bulto
         -ID: {}
-        -PESO {}'''.format(self.__id, self.__peso)
+        -PESO {} KG'''.format(self.__id, float(self.__peso))
 
 
 # vuelo y subsecuentes
@@ -191,7 +206,7 @@ class Vuelo():
     -hora de llegada: hora de llegada del vuelo
     -destino: destino del vuelo
     '''
-    def __main__(self, numero= None, hora_salida= None, hora_llegada=None,
+    def __init__(self, numero= None, hora_salida= None, hora_llegada=None,
                  destino= None):
         validar_int(numero)
         self.__numero = numero
@@ -236,11 +251,10 @@ class Vuelo():
         self.__destino = nuevo_destino
 
     def __str__(self):
-        return '''Vuelo con numero: {}
+        return ''' con numero: {}
         -Destino: {}
         -Hora de salida:    {}
-        -Hora de llegada:   {}
-        '''.format(self.__numero, self.__destino,
+        -Hora de llegada:   {}'''.format(self.__numero, self.__destino,
                    self.__hora_salida, self.__hora_llegada)
 
 
@@ -291,7 +305,7 @@ class Vuelo_carga(Vuelo):
         self.__peso_maximo = nuevo_peso_maximo
 
     def __str__(self):
-        return super().__str__() + '''
+        return "vuelo de Carga" + super().__str__() + '''
         -Cantidad de articulos a cargar: {}
         -Peso maximo: {}'''.format(len(self.__lista_carga),
                                    self.__peso_maximo)
@@ -336,9 +350,16 @@ class Vuelo_comercial(Vuelo):
 
 
 class Vuelo_internacional(Vuelo_comercial):
-    '''
+    '''clase Vuelo internacional con los atributos numeero, hora de salida, hora de llegada, destino,
+     lista de pasajeros y escalas.
 
-    '''
+    ARGS:
+    -numero: numero de serie unico e irrepetible del vuelo
+    -hora de salida: hora de salida del vuelo
+    -hora de llegada: hora de llegada del vuelo
+    -destino: destino del vuelo
+    -lista de pasajeros: lista de pasajeros que ira en el vuelo
+    -Escalas: lista de lugares donde aterrizara el avion y volvera a salir'''
 
     def __init__(self, numero=None, hora_salida=None, hora_llegada=None,
                  destino=None, lista_pasajeros=[], escalas= []):
@@ -347,8 +368,11 @@ class Vuelo_internacional(Vuelo_comercial):
         validar_lista(escalas)
         self.__escalas = escalas
 
+    #muestra las escalas que realizara el vuelo
     def mostrar_escalas(self):
-        pass
+        print("las escalas que realizara el vuelo {} con destino {} son:".format(self.__numero, self.__destino))
+        for i in self.__escalas:
+            print("     -".format(i))
 
     #getter y setters
     @property
@@ -360,13 +384,20 @@ class Vuelo_internacional(Vuelo_comercial):
         self.__escalas = nuevas_escalas
 
     def __str__(self):
-        return super().__str__() + '''
+        return "Vuelo Comercial Internacional" + super().__str__() + '''
         -Cantidad de escalas {}'''.format(len(self.__escalas))
 
 class Vuelo_nacional(Vuelo_comercial):
-    '''
+    '''clase Vuelo nacional con los atributos numeero, hora de salida, hora de llegada, destino,
+     lista de pasajeros y numero minimo de pasajeros
 
-    '''
+    ARGS:
+    -numero: numero de serie unico e irrepetible del vuelo
+    -hora de salida: hora de salida del vuelo
+    -hora de llegada: hora de llegada del vuelo
+    -destino: destino del vuelo
+    -lista de pasajeros: lista de pasajeros que ira en el vuelo
+    -Numero minimo de pasajeros: numero minimo de pasajeros para que costee el vuelo'''
 
     def __init__(self, numero=None, hora_salida=None, hora_llegada=None,
                  destino=None, lista_pasajeros=[], num_minimo_pasajeros= None):
@@ -374,6 +405,12 @@ class Vuelo_nacional(Vuelo_comercial):
                          destino, lista_pasajeros)
         validar_int(num_minimo_pasajeros)
         self.__num_minimo_pasajeros = num_minimo_pasajeros
+
+    def puede_volar(self):
+        if len(self.__lista_pasajeros) >= self.__num_minimo_pasajeros:
+            return True
+        else:
+            return False
 
     #getter y setter
     @property
@@ -385,8 +422,58 @@ class Vuelo_nacional(Vuelo_comercial):
         self.__num_minimo_pasajeros = nuevo_min_pasajeros
 
     def __str__(self):
-        return super().__str__() + '''
+        return "Vuelo Comercial Nacional" + super().__str__() + '''
         -Numero minimo de pasajeros: {}'''.format(self.__num_minimo_pasajeros)
 
 if __name__ == "__main__":
-    pass
+    #creamos objetos
+    #pasajeros
+    pasajero1 = Pasajero(1001,"pasajero1",1000)
+    pasajero2 = Pasajero(1002,"pasajero2",1000)
+    pasajero3 = Pasajero(1003,"pasajero3",1000)
+
+    #pasajeros frecuentes
+    p_frecuente1 = Pasajero_frecuente(1004,"frecuente1",1000,100)
+    p_frecuente2 = Pasajero_frecuente(1005,"frecuente2",1000,200)
+    p_frecuente3 = Pasajero_frecuente(1006,"frecuente3",1000,200)
+
+    #pasajeros infrecuentes
+    p_infrecuente1 = Pasajero_no_frecuente(1006, "pasajero_no_f1", 1000, 0)
+    p_infrecuente2 = Pasajero_no_frecuente(1007, "pasajero_no_f2", 1000, 0)
+    p_infrecuente3 = Pasajero_no_frecuente(1008, "pasajero_no_f3", 1000, 0)
+
+
+    #bultos
+    bulto1 = Bulto(1001, 50)
+    bulto2 = Bulto(1002, 100)
+    bulto3 = Bulto(1003, 700)
+
+    #vuelos
+
+    #vuelo
+    vuelo = Vuelo(501, "10:50", "13:30", "estambul")
+
+    #vuelo de carga
+    vuelo_carga = Vuelo_carga(502, "11:00", "12:39", "Hermosillo", [bulto1, bulto2], 500)
+
+    #vuelo comercial
+    vuelo_comercial = Vuelo_comercial(503, "07:00", "10:00", "Guadalajara", [pasajero1, p_frecuente1, p_infrecuente1])
+
+    #vuelo internacional
+    vuelo_internacional = Vuelo_internacional(504, "08:00", "18:00", "madrid", [pasajero2, p_frecuente2, p_infrecuente2])
+
+    #vuelo nacional
+    vuelo_nacional = Vuelo_nacional(505, "13:00", "16:00", "merida", [pasajero3, p_frecuente3, p_infrecuente3], 4)
+
+    '''probamos metodos de objetos'''
+
+    #lista de todos los objetos para pruebas
+    lista_todo = [pasajero1, p_frecuente1,p_infrecuente1, bulto1, vuelo, vuelo_carga,
+                  vuelo_comercial, vuelo_internacional, vuelo_nacional]
+    #str    '''bien'''
+    for i in lista_todo:
+        print(i)
+
+
+
+
