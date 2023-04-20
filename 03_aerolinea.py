@@ -1,7 +1,7 @@
 from datetime import datetime
 
 
-# metodos de validacion para reutilizacion
+# métodos de validación para reutilización
 
 
 def validar_str(dato):
@@ -49,7 +49,7 @@ def validar_hora_hh_mm(dato):
 # pasajeros y subsecuentes
 class Pasajero():
     """Clase Pasajero con los atributos id, nombre y precio billete,
-    con el metodo mostrar puntos
+    con el método mostrar puntos
 
     ARGS
     -Id: número unico e irrepetible para identificar al pasajero
@@ -65,9 +65,10 @@ class Pasajero():
         validar_float(precio_billete)
         self.__precio_billete = precio_billete
 
-    # funcion mostrar puntos que muestra los puntos actuales del pasajero
+    # función mostrar puntos que muestra los puntos actuales del pasajero
     def mostrar_puntos(self):
-        print("puntos actuales: {}".format(self.__cantidad_puntos))
+        return """la cantidad de puntos del pasajero con Id {}
+y nombre {}""".format(self.__id, self.__nombre)
 
     # setter y getters
     @property
@@ -106,7 +107,7 @@ class Pasajero():
 
 class Pasajero_frecuente(Pasajero):
     """Clase Pasajero frecuente con los atributos id, nombre, precio billete,
-    y cantidad de puntos, con el metodo mostrar puntos heredado del padre
+    y cantidad de puntos, con el método mostrar puntos heredado del padre
 
     ARGS
     -Id: número unico e irrepetible para identificar al pasajero
@@ -122,7 +123,7 @@ class Pasajero_frecuente(Pasajero):
         self.__cantidad_puntos = cantidad_puntos
 
     def mostrar_puntos(self):
-        super().mostrar_puntos()
+        print(super().mostrar_puntos() + "es de {}".format(self.__cantidad_puntos))
 
     # getter y setter
     @property
@@ -141,7 +142,7 @@ class Pasajero_frecuente(Pasajero):
 
 class Pasajero_no_frecuente(Pasajero):
     """Clase Pasajero frecuente con los atributos id, nombre, precio billete,
-    y cantidad de puntos, con el metodo mostrar puntos heredado del padre
+    y cantidad de puntos, con el método mostrar puntos heredado del padre
 
     ARGS
     -Id: número unico e irrepetible para identificar al pasajero
@@ -155,6 +156,10 @@ class Pasajero_no_frecuente(Pasajero):
         super().__init__(id, nombre, precio_billete)
         validar_float(cantidad_puntos)
         self.__cantidad_puntos = cantidad_puntos
+
+    def mostrar_puntos(self):
+        print(super().mostrar_puntos() + "es de {}".format(self.__cantidad_puntos))
+
 
     # getter y setter
     @property
@@ -207,16 +212,16 @@ class Bulto():
 
     def __str__(self):
         return '''Bulto
-        -ID: {}
-        -PESO {} KG'''.format(self.__id, float(self.__peso))
+    -ID: {}
+    -PESO {} KG'''.format(self.__id, float(self.__peso))
 
 
 # vuelo y subsecuentes
 class Vuelo():
-    """Clase Vuelo con los atributos numero, hora de salida, hora de llegada y destino.
+    """Clase Vuelo con los atributos número, hora de salida, hora de llegada y destino.
 
     ARGS:
-    -numero: numero de serie unico e irrepetible del vuelo
+    -número: número de serie unico e irrepetible del vuelo
     -hora de salida: hora de salida del vuelo
     -hora de llegada: hora de llegada del vuelo
     -destino: destino del vuelo
@@ -279,16 +284,16 @@ class Vuelo():
 
 
 class Vuelo_carga(Vuelo):
-    """clase Vuelo de carga con los atributos numero, hora de salida, hora de llegada, destino,
-    lista de carga y peso maximo, contiene los metodos agregar carga y mostrar carga.
+    """Clase Vuelo de carga con los atributos número, hora de salida, hora de llegada, destino,
+    lista de carga y peso máximo, contiene los métodos agregar carga, mostrar carga y quitar carga.
 
     ARGS:
-    -numero: numero de serie unico e irrepetible del vuelo
+    -número: número de serie unico e irrepetible del vuelo
     -hora de salida: hora de salida del vuelo
     -hora de llegada: hora de llegada del vuelo
     -destino: destino del vuelo
     -lista carga: lista con todos los bultos que llevara el vuelo
-    -peso maximo: peso maximo permitido por el vuelo
+    -peso máximo: peso máximo permitido por el vuelo
     """
 
     def __init__(self, numero=None, hora_salida=None, hora_llegada=None,
@@ -299,30 +304,35 @@ class Vuelo_carga(Vuelo):
         validar_float(peso_maximo)
         self.__peso_maximo = peso_maximo
         self.__peso_actual = 0
+        for carga in lista_carga:
+            self.__peso_actual += carga.peso
 
-    # metodo para agregar carga nueva a la lista de carga
+    # método para agregar carga nueva a la lista de carga
     def agregar_carga(self, nueva_carga):
         if (self.__peso_actual + nueva_carga.peso) > self.__peso_maximo:
             print('''Carga máxima excedida, no se ha añadido el bulto con ID {}
-    La carga excede por {} KG'''.format(nueva_carga.id, self.__peso_actual + nueva_carga.peso - self.__peso_maximo))
+>>> La carga excede por {} KG'''.format(nueva_carga.id, self.__peso_actual + nueva_carga.peso - self.__peso_maximo))
 
         else:
             self.__lista_carga.append(nueva_carga)
             self.__peso_actual += nueva_carga.peso
-            print("""Se ha agregado el buldo con ID {}
-    La carga actual es de {} Kg / {}""".format(nueva_carga.id, self.__peso_actual, self.__peso_maximo))
+            print("""Se ha agregado el bulto con ID {}
+>>> La carga actual es de {} / {} Kg""".format(nueva_carga.id, self.__peso_actual, self.__peso_maximo))
 
-    # metodo para mostrar todos los str de los objetos que contiene la lista de carga
+    # método para mostrar todos los str de los objetos que contiene la lista de carga
     def mostrar_carga(self):
         for carga in self.__lista_carga:
             print(carga)
 
-    #metodo para quitar carga de la lista de carga
+    # método para quitar carga de la lista de carga
     def quitar_carga(self, carga_quitar):
         pass
+        self.__lista_carga.remove(carga_quitar)
+        self.__peso_actual -= carga_quitar.peso
+        print("""se ha quitado el bulto con ID {}
+>>> La carga actual es de {} / {} Kg""".format(carga_quitar.id, self.__peso_actual, self.__peso_maximo))
 
     # getter y setters
-
     @property
     def lista_carga(self):
         return self.__lista_carga
@@ -343,16 +353,17 @@ class Vuelo_carga(Vuelo):
 
     def __str__(self):
         return "vuelo de Carga" + super().__str__() + '''
-        -Cantidad de articulos a cargar: {}
-        -Peso maximo: {}'''.format(len(self.__lista_carga),
+        -Cantidad de artículos a cargar: {}
+        -Peso máximo: {}'''.format(len(self.__lista_carga),
                                    self.__peso_maximo)
 
 
 class Vuelo_comercial(Vuelo):
-    """clase Vuelo comercial con los atributos numeero, hora de salida, hora de llegada, destino y lista de pasajeros.
+    """Clase Vuelo comercial con los atributos número, hora de salida, hora de llegada, destino y lista de pasajeros,
+    cón los métodos agregar pasajero, mostrar lista de pasajeros y quitar pasajero
 
     ARGS:
-    -numero: numero de serie unico e irrepetible del vuelo
+    -número: número de serie unico e irrepetible del vuelo
     -hora de salida: hora de salida del vuelo
     -hora de llegada: hora de llegada del vuelo
     -destino: destino del vuelo
@@ -364,18 +375,20 @@ class Vuelo_comercial(Vuelo):
         validar_lista(lista_pasajeros)
         self.__lista_pasajeros = lista_pasajeros
 
-    # metodo para agregar pasajero a la lista de pasajeros
+    # método para agregar pasajero a la lista de pasajeros
     def agregar_pasajero(self, pasajero):
         self.__lista_pasajeros.append(pasajero)
+        print("""se ha añadido el pasajero {} a el vuelo {}""".format(pasajero.nombre, self.numero ))
 
-    # metodo para mostrar la lista de pasajeros
+    # método para mostrar la lista de pasajeros
     def mostrar_lista_pasajeros(self):
         for pasajero in self.__lista_pasajeros:
             print(pasajero)
 
-    #
+    # quita un pasajero de la lista de pasajeros del vuelo
     def quitar_pasajero(self, pasajero_quitar):
-        pass
+        self.__lista_pasajeros.remove(pasajero_quitar)
+        print("""se ha quitado el pasajero {} a el vuelo {}""".format(pasajero_quitar.id, self.numero))
 
     # getter y setters
     @property
@@ -393,17 +406,17 @@ class Vuelo_comercial(Vuelo):
 
 
 class Vuelo_internacional(Vuelo_comercial):
-    """Clase Vuelo internacional con los atributos número, hora de salida, hora de llegada, destino, lista de pasajeros y escalas.
-
-    -Con el metodo mostrar escalas
+    """Clase Vuelo internacional con los atributos número, hora de salida, hora de llegada, destino
+    lista de pasajeros y escalas.
+    Con el método mostrar escalas, agregar escala y quitar escala
 
     ARGS:
-    -numero: numero de serie unico e irrepetible del vuelo
+    -número: número de serie unico e irrepetible del vuelo
     -hora de salida: hora de salida del vuelo
     -hora de llegada: hora de llegada del vuelo
     -destino: destino del vuelo
     -lista de pasajeros: lista de pasajeros que ira en el vuelo
-    -Escalas: lista de lugares donde aterrizara el avion y volvera a salir"""
+    -Escalas: lista de lugares donde aterrizara el avion y volverá a salir"""
 
     def __init__(self, numero=None, hora_salida=None, hora_llegada=None,
                  destino=None, lista_pasajeros=[], escalas=[]):
@@ -414,17 +427,19 @@ class Vuelo_internacional(Vuelo_comercial):
 
     # muestra las escalas que realizara el vuelo
     def mostrar_escalas(self):
-        print("las escalas que realizara el vuelo {} con destino {} son:".format(self.__numero, self.__destino))
+        print("las escalas que realizara el vuelo {} con destino {} son:".format(self.numero, self.destino))
         for escala in self.__escalas:
-            print("     -".format(escala))
+            print("     -{}".format(escala))
 
-    #agregar escala al vuelo
+    # agregar escala al vuelo
     def agregar_escala(self, escala_nueva):
-        pass
+        self.__escalas.append(escala_nueva)
+        print("""se ha agregado la escala {} al vuelo {}""".format(escala_nueva, self.numero))
 
-    #quita escala al vuelo
+    # quita escala al vuelo
     def quitar_escala(self, escala):
-        pass
+        self.__escalas.remove(escala)
+        print("""se ha quitado la escala {} al vuelo {}""".format(escala, self.numero))
 
     # getter y setters
     @property
@@ -442,15 +457,17 @@ class Vuelo_internacional(Vuelo_comercial):
 
 
 class Vuelo_nacional(Vuelo_comercial):
-    """clase Vuelo nacional con los atributos numeero, hora de salida, hora de llegada, destino, lista de pasajeros y numero minimo de pasajeros
+    """Clase Vuelo nacional con los atributos número, hora de salida, hora de llegada, destino
+    lista de pasajeros y número minimo de pasajeros.
+    Con el metodo Puede volar
 
     ARGS:
-    -numero: numero de serie unico e irrepetible del vuelo
+    -número: número de serie unico e irrepetible del vuelo
     -hora de salida: hora de salida del vuelo
     -hora de llegada: hora de llegada del vuelo
     -destino: destino del vuelo
     -lista de pasajeros: lista de pasajeros que ira en el vuelo
-    -Numero minimo de pasajeros: numero minimo de pasajeros para que costee el vuelo"""
+    -número minimo de pasajeros: número minimo de pasajeros para que costee el vuelo"""
 
     def __init__(self, numero=None, hora_salida=None, hora_llegada=None,
                  destino=None, lista_pasajeros=[], num_minimo_pasajeros=None):
@@ -459,9 +476,9 @@ class Vuelo_nacional(Vuelo_comercial):
         validar_int(num_minimo_pasajeros)
         self.__num_minimo_pasajeros = num_minimo_pasajeros
 
-    #metodo para orroborar que el vuelo tenga el minimo de pasajeros y sea redituable que vuele
+    # método para corroborar que el vuelo tenga el minimo de pasajeros y sea redituable que vuele
     def puede_volar(self):
-        if len(self.__lista_pasajeros) >= self.__num_minimo_pasajeros:
+        if len(self.lista_pasajeros) >= self.__num_minimo_pasajeros:
             return True
         else:
             return False
@@ -506,7 +523,7 @@ if __name__ == "__main__":
     # vuelos
 
     # vuelo
-    vuelo = Vuelo(501, "10:50", "13:30", "estambul")
+    vuelo = Vuelo(501, "10:50", "13:30", "Estambul")
 
     # vuelo de carga
     vuelo_carga = Vuelo_carga(502, "11:00", "12:39", "Hermosillo", [bulto1, bulto2], 500)
@@ -515,13 +532,13 @@ if __name__ == "__main__":
     vuelo_comercial = Vuelo_comercial(503, "07:00", "10:00", "Guadalajara", [pasajero1, p_frecuente1, p_infrecuente1])
 
     # vuelo internacional
-    vuelo_internacional = Vuelo_internacional(504, "08:00", "18:00", "madrid",
-                                              [pasajero2, p_frecuente2, p_infrecuente2])
+    vuelo_internacional = Vuelo_internacional(504, "08:00", "18:00", "Madrid",
+                            [pasajero1, p_frecuente1, p_infrecuente1], ["Barcelona", "Francia"])
 
     # vuelo nacional
     vuelo_nacional = Vuelo_nacional(505, "13:00", "16:00", "merida", [pasajero3, p_frecuente3, p_infrecuente3], 4)
 
-    '''probamos metodos de objetos'''
+    '''probamos métodos de objetos'''
 
     # lista de todos los objetos para pruebas
     lista_todo = [pasajero1, p_frecuente1, p_infrecuente1, bulto1, vuelo, vuelo_carga,
@@ -529,3 +546,33 @@ if __name__ == "__main__":
     # str
     for met_str in lista_todo:
         print(met_str)
+
+    # pasajero, frecuente y no frecuente
+    pasajero1.mostrar_puntos()
+    p_frecuente1.mostrar_puntos()
+    p_infrecuente1.mostrar_puntos()
+
+    # vuelo de carga
+    vuelo_carga.mostrar_carga()
+    vuelo_carga.agregar_carga(bulto3)
+    vuelo_carga.quitar_carga(bulto1)
+    vuelo_carga.mostrar_carga()
+
+    # Vuelo comercial
+    print("_____")
+    vuelo_comercial.agregar_pasajero(pasajero2)
+    vuelo_comercial.mostrar_lista_pasajeros()
+    print("____")
+    vuelo_comercial.quitar_pasajero(pasajero1)
+    vuelo_comercial.mostrar_lista_pasajeros()
+
+    #vuelo internacional
+    print("____")
+    vuelo_internacional.agregar_escala("Estambul")
+    vuelo_internacional.mostrar_escalas()
+    vuelo_internacional.quitar_escala("Francia")
+    vuelo_internacional.mostrar_escalas()
+
+    # Vuelo Nacional
+    print("____")
+    print(vuelo_nacional.puede_volar())
