@@ -49,7 +49,7 @@ def validar_hora_hh_mm(dato):
 # pasajeros y subsecuentes
 class Pasajero():
     """Clase Pasajero con los atributos id, nombre y precio billete,
-    con el método mostrar puntos
+    con el método mostrar precio
 
     ARGS
     -Id: número unico e irrepetible para identificar al pasajero
@@ -66,9 +66,10 @@ class Pasajero():
         self.__precio_billete = precio_billete
 
     # función mostrar puntos que muestra los puntos actuales del pasajero
-    def mostrar_puntos(self):
-        return """la cantidad de puntos del pasajero con Id {}
-y nombre {}""".format(self.__id, self.__nombre)
+    def mostrar_precio(self):
+        return print("""el precio del billete del cliente {} 
+        con ID {}
+        es de {} $""".format(self.__nombre, self.__id, self.__precio_billete))
 
     # setter y getters
     @property
@@ -107,7 +108,8 @@ y nombre {}""".format(self.__id, self.__nombre)
 
 class Pasajero_frecuente(Pasajero):
     """Clase Pasajero frecuente con los atributos id, nombre, precio billete,
-    y cantidad de puntos, con el método mostrar puntos heredado del padre
+    y cantidad de puntos, con el método mostrar precio heredado del padre y
+    el metodo mostrar puntos
 
     ARGS
     -Id: número unico e irrepetible para identificar al pasajero
@@ -122,8 +124,13 @@ class Pasajero_frecuente(Pasajero):
         validar_float(cantidad_puntos)
         self.__cantidad_puntos = cantidad_puntos
 
+    def mostrar_precio(self):
+        return super().mostrar_precio()
+
     def mostrar_puntos(self):
-        print(super().mostrar_puntos() + "es de {}".format(self.__cantidad_puntos))
+        print("""los puntos del pasajero {}
+        con ID {}
+        son {}""".format(self.nombre, self.id, self.__cantidad_puntos))
 
     # getter y setter
     @property
@@ -142,7 +149,8 @@ class Pasajero_frecuente(Pasajero):
 
 class Pasajero_no_frecuente(Pasajero):
     """Clase Pasajero frecuente con los atributos id, nombre, precio billete,
-    y cantidad de puntos, con el método mostrar puntos heredado del padre
+    y cantidad de puntos, con el método mostrar precio heredado del padre y
+    el metodo mostrar puntos.
 
     ARGS
     -Id: número unico e irrepetible para identificar al pasajero
@@ -157,8 +165,13 @@ class Pasajero_no_frecuente(Pasajero):
         validar_float(cantidad_puntos)
         self.__cantidad_puntos = cantidad_puntos
 
+    def mostrar_precio(self):
+        return super().mostrar_precio()
+
     def mostrar_puntos(self):
-        print(super().mostrar_puntos() + "es de {}".format(self.__cantidad_puntos))
+        print("""los puntos del pasajero {}
+        con ID {}
+        son {}""".format(self.nombre, self.id, self.__cantidad_puntos))
 
 
     # getter y setter
@@ -548,7 +561,10 @@ if __name__ == "__main__":
         print(met_str)
 
     # pasajero, frecuente y no frecuente
-    pasajero1.mostrar_puntos()
+    pasajero1.mostrar_precio()
+    p_frecuente1.mostrar_precio()
+    p_infrecuente1.mostrar_precio()
+
     p_frecuente1.mostrar_puntos()
     p_infrecuente1.mostrar_puntos()
 
